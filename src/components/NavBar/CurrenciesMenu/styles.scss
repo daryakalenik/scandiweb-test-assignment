@@ -1,0 +1,50 @@
+@import "../../../variables/variables";
+
+.currency-block__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.currency-block__header {
+  font-size: 25px;
+  font-family: $main-font;
+  line-height: 30px;
+  color: $main-font-color;
+  margin-right: 5px;
+}
+
+.currency-block__tick {
+  display: inline-block;
+  position: absolute;
+  top: 15px;
+  height: 5px;
+  width: 5px;
+  border-bottom: 2px solid $main-font-color;
+  border-right: 2px solid $main-font-color;
+}
+
+.currency-block__list {
+  position: absolute;
+  top: 35px;
+  width: 114px;
+  height: fit-content;
+  z-index: 2;
+}
+
+.currency-block__list-item {
+  cursor: pointer;
+  list-style-type: none;
+  font-family: $main-font;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 160%;
+}
+
+.currency-block__list-item:hover {
+  color: $main-green-color;
+}

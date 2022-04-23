@@ -1,0 +1,103 @@
+@import "../../variables/variables";
+
+.nav-bar {
+  width: 100%;
+  height: 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-bar__wrapper {
+  height: 100%;
+  margin-left: 100px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// MENU
+
+.menu {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.menu__item {
+  margin-right: 32px;
+  font-family: $main-font;
+  font-weight: 600;
+  color: $main-font-color;
+  text-decoration: none;
+}
+
+.menu__item--active {
+  color: $main-green-color;
+  position: relative;
+}
+
+.menu__item--active::after {
+  content: "";
+  position: absolute;
+  top: 48px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top: 2px solid $main-green-color;
+}
+
+// LOGO
+
+.nav-bar__logo {
+  width: 20px;
+  height: 50%;
+  flex-basis: 100%;
+  background-image: url("./icons/a-logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+// CART AND CURRENCY
+
+.cart-currency-block {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.currency-block {
+  margin-right: 23px;
+}
+
+.cart-block {
+  cursor: pointer;
+  width: 27px;
+  height: 30px;
+  background-image: url("./icons/cart.PNG");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: relative;
+}
+
+.cart-block__items-number {
+  position: absolute;
+  left: 60%;
+  width: 17px;
+  height: 17px;
+  background: $main-font-color;
+  border-radius: 50%;
+  font-family: $main-font;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 17px;
+  text-align: center;
+  color: white;
+}

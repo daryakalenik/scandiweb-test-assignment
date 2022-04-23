@@ -1,0 +1,50 @@
+@import "./variables/variables";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.App {
+  height: fit-content;
+  padding-bottom: 70px;
+  width: 100%;
+}
+
+.App__container {
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+.alert-block {
+  font-family: $main-font;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 160%;
+  color: $main-font-color;
+  text-align: center;
+  animation: slide-in 1000ms;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.carousel .control-next.control-arrow:before {
+  border-left: 8px solid #1d1f22;
+}
+.carousel .control-prev.control-arrow:before {
+  border-right: 8px solid #1d1f22;
+}

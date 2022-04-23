@@ -1,0 +1,63 @@
+@import "../../variables/variables";
+
+.cart {
+  margin-top: 100px;
+}
+
+.cart__header {
+  font-family: $main-font;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  padding-bottom: 55px;
+  margin-bottom: 24px;
+}
+
+.cart__cart-product {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+}
+
+.cart__total-block {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  font-family: $main-font;
+  font-weight: 600;
+}
+
+.cart__total-block > * {
+  margin-bottom: 10px;
+}
+
+.total-block__tax,
+.total-block_qty,
+.total-block__amount {
+  font-family: $second-font;
+}
+
+.cart-buttons-block__check-out {
+  width: 250px;
+  height: 40px;
+  margin-bottom: 20px;
+  margin-top: 16px;
+  margin-right: 35px;
+  background-color: #5ece7b;
+  border: none;
+  font-family: $main-font;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 40px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.carousel-root {
+  flex-basis: 33%;
+  max-width: 250px;
+}
