@@ -2,11 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import sanitize from "sanitize-html";
 
-import {
-  ADD_ITEM_TO_CART,
-  CHANGE_PATHNAME,
-  CHANGE_TOTAL,
-} from "../../ducks/main/reducer";
+import { ADD_ITEM_TO_CART, CHANGE_PATHNAME } from "../../ducks/main/reducer";
 
 import "./style.scss";
 
@@ -382,9 +378,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     CHANGE_PATHNAME: (value) => {
       dispatch(CHANGE_PATHNAME(value));
-    },
-    CHANGE_TOTAL: (value) => {
-      dispatch(CHANGE_TOTAL(value));
     },
   };
 };

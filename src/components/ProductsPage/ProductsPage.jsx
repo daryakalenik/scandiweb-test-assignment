@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import {
   ADD_ITEM_TO_CART,
   CHANGE_PATHNAME,
-  CHANGE_TOTAL,
   ADD_PRODUCTS,
 } from "../../ducks/main/reducer";
 
@@ -420,9 +419,7 @@ const mapDispatchToProps = (dispatch) => {
     CHANGE_PATHNAME: (value) => {
       dispatch(CHANGE_PATHNAME(value));
     },
-    CHANGE_TOTAL: (value) => {
-      dispatch(CHANGE_TOTAL(value));
-    },
+
     ADD_PRODUCTS: (value) => {
       dispatch(ADD_PRODUCTS(value));
     },

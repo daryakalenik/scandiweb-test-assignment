@@ -59,7 +59,5 @@ export const {
   CHANGE_CART_STATUS,
   CHANGE_PATHNAME,
   ADD_PRODUCTS,
-  CHANGE_TOTAL,
   CONVERT_TOTAL,
-  ADD_DUPLICATE_TO_CART,
 } = reducer.actions;
