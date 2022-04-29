@@ -12,13 +12,8 @@ import { CHANGE_CART_STATUS, CHANGE_PATHNAME } from "../../ducks/main/reducer";
 import "./styles.scss";
 
 class NavBar extends React.Component {
-  state = { isCartOpened: false };
-
-  handleCartClick = () => {
-    this.setState({
-      isCartOpened: !this.state.isCartOpened,
-    });
-    this.props.CHANGE_CART_STATUS();
+  handleCartClick = (e) => {
+    this.props.CHANGE_CART_STATUS("");
   };
 
   handleNavClick = (e) => {
@@ -28,14 +23,10 @@ class NavBar extends React.Component {
   render() {
     return (
       <nav
-        className="nav-bar"
-        style={
+        className={
           this.props.reduxState.main.isCartOpened
-            ? {
-                boxShadow:
-                  "calc(100vh + 100vw) calc(100vh + 100vw) 0 calc(100vh + 100vw) rgba(0, 0, 0, 0.3)",
-              }
-            : null
+            ? "nav-bar nav-bar--cart-opened"
+            : "nav-bar"
         }
       >
         <div className="nav-bar__wrapper">

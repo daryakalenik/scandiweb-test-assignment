@@ -26,13 +26,29 @@
   grid-gap: 200px;
 }
 
+.item {
+  padding: 16px;
+  position: relative;
+}
+
+.item--not-in-stock {
+  opacity: 0.2;
+}
+
+.item--active {
+  padding: 16px;
+  position: relative;
+  box-shadow: 0px 4px 35px 0px #a8acb030;
+}
+
 .item-img {
   display: block;
+  margin-bottom: 24px;
   width: 356px;
   height: 338px;
   background-repeat: no-repeat;
   background-size: contain;
-  background-position: contain;
+  background-position: center center;
   position: relative;
 }
 
@@ -52,12 +68,23 @@
   color: #000000;
 }
 
-.item-img--active span {
+.item span {
   content: "";
   position: absolute;
-  bottom: 5px;
-  left: 170px;
-  display: inline-block;
+  display: block;
+  left: 220px;
+  bottom: 80px;
+  width: 45px;
+  height: 45px;
+  background-color: transparent;
+}
+
+.item--active span {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 220px;
+  bottom: 80px;
   width: 45px;
   height: 45px;
   background: $main-green-color;

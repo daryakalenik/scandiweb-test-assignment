@@ -8,35 +8,45 @@ import {
   DELETE_ITEM_FROM_CART,
   CHANGE_CART_STATUS,
 } from "../../../ducks/main/reducer";
+import { AttributesBlock } from "../../AttributesBlock/AttributesBlock";
+import { cartPriceSwitch } from "../../../helpers/cartPriceSwitch";
+import { totalPriceSwitch } from "../../../helpers/totalPriceSwitch";
+import { miniCartItemsNumberSwitch } from "../../../helpers/miniCartItemsNumberSwitch";
+import CartProductButtons from "../../CartProductButtons/CartProductButtons";
 
 import "./style.scss";
 
 class MiniCart extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.wrapperRef = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  handleClickOutside(event) {
+    if (
+      this.wrapperRef &&
+      !this.wrapperRef.current.contains(event.target) &&
+      event.target.className !== "cart-block cart-currency-block__cart-block" &&
+      event.target.className !== "cart-block__items-number"
+    ) {
+      this.props.CHANGE_CART_STATUS("");
+    }
+  }
   render() {
     return (
-      <div className="mini-cart">
+      <div className="mini-cart" ref={this.wrapperRef}>
         <h3 className="mini-cart__header">
-          {(() => {
-            switch (this.props.reduxState.main.cart.length) {
-              case 1:
-                return (
-                  <>
-                    <span className="mini-cart__header--bold">My Bag, </span>
-                    {this.props.reduxState.main.cart.length} item
-                  </>
-                );
-
-              case 0:
-                return "Your cart is empty";
-              default:
-                return (
-                  <>
-                    <span className="mini-cart__header--bold">My Bag, </span>
-                    {this.props.reduxState.main.cart.length} items
-                  </>
-                );
-            }
-          })()}
+          {miniCartItemsNumberSwitch(this.props.reduxState.main.cart.length)}
         </h3>
         <div className="mini-cart__products-wrapper">
           {this.props.reduxState.main.cart.length > 0
@@ -58,208 +68,14 @@ class MiniCart extends React.Component {
                         <p>{item.product.brand}</p>
                         <p>{item.product.name}</p>
                         <p>
-                          {(() => {
-                            switch (this.props.reduxState.main.currency) {
-                              case "$":
-                                return (
-                                  <>
-                                    {
-                                      item.product.prices[
-                                        item.product.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.product.prices[
-                                        item.product.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "£":
-                                return (
-                                  <>
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "A$":
-                                return (
-                                  <>
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "¥":
-                                return (
-                                  <>
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-                              case "₽":
-                                return (
-                                  <>
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.product.prices[
-                                        [
-                                          item.product.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              default:
-                                return null;
-                            }
-                          })()}
+                          {cartPriceSwitch(
+                            this.props.reduxState.main.currency,
+                            item
+                          )}
                         </p>
-                        <div className="cart-attributes cart-product__cart-attributes">
-                          {this.props.reduxState.main.products
-                            .find((pr) => {
-                              return pr.id === item.product.id;
-                            })
-                            .attributes.map((atr) => {
-                              return atr.type === "text" ? (
-                                <div>
-                                  <p className="cart-attributes__name">
-                                    {atr.name}
-                                  </p>
-                                  {atr.items.map((atrItem) => {
-                                    return (
-                                      <span
-                                        className={
-                                          item.attributes[atr.name] ===
-                                          atrItem.value
-                                            ? "cart-attributes__text cart-attributes__text--active"
-                                            : "cart-attributes__text"
-                                        }
-                                      >
-                                        {atrItem.value}
-                                      </span>
-                                    );
-                                  })}
-                                </div>
-                              ) : (
-                                <div>
-                                  <p className="cart-attributes__name">
-                                    {atr.name}
-                                  </p>
-                                  {atr.items.map((atrItem) => {
-                                    return (
-                                      <span
-                                        style={{
-                                          backgroundColor: atrItem.value,
-                                        }}
-                                        className={
-                                          item.attributes[atr.name] ===
-                                          atrItem.value
-                                            ? "cart-attributes__swatch cart-attributes__swatch--active"
-                                            : "cart-attributes__swatch"
-                                        }
-                                      />
-                                    );
-                                  })}
-                                </div>
-                              );
-                            })}
-                        </div>
+                        <AttributesBlock item={item} />
                       </div>
-                      <div className="product-buttons cart-product__cart-buttons">
-                        <div
-                          value={item.product.id}
-                          onClick={() => {
-                            this.props.ADD_ITEM_TO_CART(item);
-                          }}
-                        >
-                          +
-                        </div>
-                        <p className="product-buttons__count">
-                          {
-                            this.props.reduxState.main.cart.filter((value) => {
-                              return (
-                                value.product.id === item.product.id &&
-                                JSON.stringify(value.attributes) ===
-                                  JSON.stringify(item.attributes)
-                              );
-                            }).length
-                          }
-                        </p>
-                        <div
-                          value={item.product.id}
-                          onClick={() => {
-                            this.props.DELETE_ITEM_FROM_CART(item);
-                          }}
-                        >
-                          -
-                        </div>
-                      </div>
+                      <CartProductButtons item={item} />
                       <div
                         className="product-photo cart-product__product-photo"
                         style={{
@@ -274,63 +90,11 @@ class MiniCart extends React.Component {
         <div className="mini-cart-total mini-cart__total-block">
           <span className="mini-cart-total__header">Total</span>
           <span className="mini-cart-total__amount">
-            {(() => {
-              let total = 0;
-              switch (this.props.reduxState.main.currency) {
-                case "$":
-                  total = this.props.reduxState.main.cart
-                    .map((item) => {
-                      return item.product.prices[0].amount;
-                    })
-                    .reduce((item, prev) => {
-                      return item + prev;
-                    }, 0);
-                  this.props.CONVERT_TOTAL(total);
-                  return total;
-                case "£":
-                  total = this.props.reduxState.main.cart
-                    .map((item) => {
-                      return item.product.prices[1].amount;
-                    })
-                    .reduce((item, prev) => {
-                      return item + prev;
-                    }, 0);
-                  this.props.CONVERT_TOTAL(total);
-                  return total;
-                case "A$":
-                  total = this.props.reduxState.main.cart
-                    .map((item) => {
-                      return item.product.prices[2].amount;
-                    })
-                    .reduce((item, prev) => {
-                      return item + prev;
-                    }, 0);
-                  this.props.CONVERT_TOTAL(total);
-                  return total;
-                case "¥":
-                  total = this.props.reduxState.main.cart
-                    .map((item) => {
-                      return item.product.prices[3].amount;
-                    })
-                    .reduce((item, prev) => {
-                      return item + prev;
-                    }, 0);
-                  this.props.CONVERT_TOTAL(total);
-                  return total;
-                case "₽":
-                  total = this.props.reduxState.main.cart
-                    .map((item) => {
-                      return item.product.prices[4].amount;
-                    })
-                    .reduce((item, prev) => {
-                      return item + prev;
-                    }, 0);
-                  this.props.CONVERT_TOTAL(total);
-                  return total;
-                default:
-                  return null;
-              }
-            })().toFixed(2)}
+            {totalPriceSwitch(
+              this.props.reduxState.main.currency,
+              this.props.reduxState.main.cart,
+              this.props.CONVERT_TOTAL
+            ).toFixed(2)}
             {this.props.reduxState.main.currency}
           </span>
         </div>

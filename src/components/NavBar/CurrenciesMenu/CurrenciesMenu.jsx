@@ -8,24 +8,40 @@ import { CHANGE_CURRENCY, CONVERT_TOTAL } from "../../../ducks/main/reducer";
 import "./styles.scss";
 
 class CurrenciesMenu extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.wrapperRef = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
   state = {
     isOpened: false,
     currency: "$",
   };
 
-  customTickStyle = {
-    transform: this.state.isOpened ? "rotate(-135deg)" : "rotate(45deg)",
-  };
-
   componentDidMount() {
     this.props.CHANGE_CURRENCY(this.state.currency);
+    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
-  togglingCurrencyMenu = () => {
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  togglingCurrencyMenu = (e) => {
     this.setState({
       isOpened: !this.state.isOpened,
     });
   };
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+      this.setState({
+        isOpened: false,
+      });
+    }
+  }
 
   handleCurrencyChange = (e) => {
     this.setState({
@@ -37,25 +53,29 @@ class CurrenciesMenu extends React.Component {
 
   render() {
     return (
-      <div className="currency-block__wrapper">
+      <div
+        className="currency-block__wrapper"
+        ref={this.wrapperRef}
+        onClick={this.togglingCurrencyMenu}
+      >
         <div>
           <p value={this.state.currency} className="currency-block__header">
             {this.state.currency}
             <span
-              className="currency-block__tick"
-              style={{
-                transform: this.state.isOpened
-                  ? "rotate(-135deg)"
-                  : "rotate(45deg)",
-                right: this.state.currency.length > 1 ? "-13px" : "-5px",
-              }}
-              onClick={this.togglingCurrencyMenu}
+              className={
+                this.state.isOpened
+                  ? "currency-block__tick currency-block__tick--opened"
+                  : "currency-block__tick"
+              }
             ></span>
           </p>
         </div>
         <ul
-          className="currency-block__list"
-          style={this.state.isOpened ? { backgroundColor: "white" } : null}
+          className={
+            this.state.isOpened
+              ? "currency-block__list currency-block__list--opened"
+              : "currency-block__list"
+          }
         >
           {this.props.data.currencies && this.state.isOpened
             ? this.props.data.currencies.map((item, index) => {

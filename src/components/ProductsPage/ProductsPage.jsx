@@ -2,411 +2,128 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Query } from "react-apollo";
+import { GET_PRODUCTS } from "../../query/query";
 
 import {
   ADD_ITEM_TO_CART,
   CHANGE_PATHNAME,
   ADD_PRODUCTS,
 } from "../../ducks/main/reducer";
+import { categoryPagePriceSwitch } from "../../helpers/categoryPagePriceSwitch";
 
 import "./style.scss";
 
 class ProductsPage extends React.Component {
-  state = { clickedOnItemWithAttributes: false };
-
   componentDidMount() {
     this.props.CHANGE_PATHNAME(window.location.pathname.slice(1));
   }
 
   render() {
-    console.log(this.props.reduxState.main);
     return (
-      <div className="category">
-        <div className="category__wrapper">
-          {this.state.clickedOnItemWithAttributes ? (
-            <p className="alert-block">
-              please go to the product page, select the attributes and add item
-              to the cart
-            </p>
-          ) : null}
-          <h1 className="category__title">{this.props.reduxState.main.path}</h1>
-          <div className="products-block category__products-block">
-            {this.props.reduxState.main.products
-              ? this.props.reduxState.main.path === "all"
-                ? this.props.reduxState.main.products.map((item) => {
-                    return (
-                      <div
-                        className="item products-block__item"
-                        key={item.id}
-                        style={
-                          item.inStock
-                            ? {}
-                            : {
-                                opacity: 0.2,
+      <>
+        <Query
+          query={GET_PRODUCTS}
+          variables={{ title: this.props.reduxState.main.path }}
+        >
+          {({ data }) => {
+            return (
+              <div className="category">
+                <div className="category__wrapper">
+                  <h1 className="category__title">
+                    {this.props.reduxState.main.path}
+                  </h1>
+                  <div className="products-block category__products-block">
+                    {data
+                      ? data.category?.products.map((item) => {
+                          return (
+                            <div
+                              className={
+                                item.inStock
+                                  ? "item products-block__item"
+                                  : "item products-block__item item--not-in-stock"
                               }
-                        }
-                      >
-                        <div
-                          to={item.id}
-                          className="item-img"
-                          style={{
-                            backgroundImage: `url(${item.gallery[0]})`,
-                          }}
-                          onMouseEnter={
-                            item.inStock
-                              ? (e) => {
-                                  e.currentTarget.className =
-                                    "item-img item-img--active";
-                                }
-                              : null
-                          }
-                          onMouseLeave={(e) => {
-                            e.currentTarget.className = "item-img";
-                          }}
-                        >
-                          <span
-                            onClick={(e) => {
-                              return item.attributes.length !== 0
-                                ? this.setState({
-                                    clickedOnItemWithAttributes: true,
-                                  })
-                                : (this.props.ADD_ITEM_TO_CART({
-                                    product: item,
-                                    itemAttributes: item.attributes,
-                                  }),
-                                  this.setState({
-                                    clickedOnItemWithAttributes: false,
-                                  }));
-                            }}
-                          ></span>
-                          {item.inStock ? " " : <p>OUT OF STOCK</p>}
-                        </div>
-
-                        <Link
-                          to={item.id}
-                          onClick={(e) => {
-                            this.props.CHANGE_PATHNAME(item.id);
-                          }}
-                          className="item__name"
-                        >
-                          {item.brand} {item.name}
-                        </Link>
-                        <p className="item__cost">
-                          {(() => {
-                            switch (this.props.reduxState.main.currency) {
-                              case "$":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        item.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].currency.symbol
+                              key={item.id}
+                              onMouseEnter={
+                                item.inStock
+                                  ? (e) => {
+                                      e.currentTarget.className =
+                                        "item--active products-block__item";
                                     }
-                                    {
-                                      item.prices[
-                                        item.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "£":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "A$":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "¥":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-                              case "₽":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              default:
-                                return null;
-                            }
-                          })()}
-                        </p>
-                      </div>
-                    );
-                  })
-                : this.props.reduxState.main.products
-                    .filter(
-                      (item) =>
-                        item.category === this.props.reduxState.main.path
-                    )
-                    .map((item) => (
-                      <div
-                        className="item products-block__item"
-                        key={item.id}
-                        style={
-                          item.inStock
-                            ? {}
-                            : {
-                                opacity: 0.2,
+                                  : null
                               }
-                        }
-                      >
-                        <div
-                          className="item-img"
-                          style={{
-                            backgroundImage: `url(${item.gallery[0]})`,
-                          }}
-                          onMouseEnter={
-                            item.inStock
-                              ? (e) => {
-                                  e.currentTarget.className =
-                                    "item-img item-img--active";
-                                }
-                              : null
-                          }
-                          onMouseLeave={(e) => {
-                            e.currentTarget.className = "item-img";
-                          }}
-                        >
-                          <span
-                            onClick={(e) => {
-                              return item.attributes.length !== 0
-                                ? this.setState({
-                                    clickedOnItemWithAttributes: true,
-                                  })
-                                : (this.props.ADD_ITEM_TO_CART({
-                                    product: item,
-                                    itemAttributes: item.attributes,
-                                  }),
-                                  this.setState({
-                                    clickedOnItemWithAttributes: false,
-                                  }));
-                            }}
-                          ></span>
-                          {item.inStock ? " " : <p>OUT OF STOCK</p>}
-                        </div>
+                              onMouseLeave={
+                                item.inStock
+                                  ? (e) => {
+                                      e.currentTarget.className =
+                                        "item products-block__item";
+                                    }
+                                  : null
+                              }
+                            >
+                              <Link
+                                to={item.id}
+                                id={item.id}
+                                onClick={(e) => {
+                                  this.props.CHANGE_PATHNAME(item.id);
+                                }}
+                                className="item-img"
+                                style={{
+                                  backgroundImage: `url(${item.gallery[0]})`,
+                                }}
+                              >
+                                {item.inStock ? " " : <p>OUT OF STOCK</p>}
+                              </Link>
+                              <span
+                                onClick={(e) => {
+                                  return item.attributes.length !== 0
+                                    ? this.props.ADD_ITEM_TO_CART({
+                                        product: item,
+                                        attributes: Object.assign(
+                                          {},
+                                          ...item.attributes.map(
+                                            (attribute) => {
+                                              return {
+                                                [attribute.name]:
+                                                  attribute.items[0].value,
+                                              };
+                                            }
+                                          )
+                                        ),
+                                      })
+                                    : this.props.ADD_ITEM_TO_CART({
+                                        product: item,
+                                        itemAttributes: item.attributes,
+                                      });
+                                }}
+                              ></span>
 
-                        <Link
-                          to={item.id}
-                          onClick={(e) => {
-                            this.props.CHANGE_PATHNAME(item.id);
-                          }}
-                          className="item__name"
-                        >
-                          {item.brand} {item.name}
-                        </Link>
-                        <p className="item__cost">
-                          {(() => {
-                            switch (this.props.reduxState.main.currency) {
-                              case "$":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        item.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        item.prices.findIndex((i) => {
-                                          return i.currency.symbol === "$";
-                                        })
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "£":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "£";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "A$":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "A$";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              case "¥":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "¥";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-                              case "₽":
-                                return (
-                                  <>
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].currency.symbol
-                                    }
-                                    {
-                                      item.prices[
-                                        [
-                                          item.prices.findIndex((i) => {
-                                            return i.currency.symbol === "₽";
-                                          }),
-                                        ]
-                                      ].amount
-                                    }
-                                  </>
-                                );
-
-                              default:
-                                return null;
-                            }
-                          })()}
-                        </p>
-                      </div>
-                    ))
-              : null}
-          </div>
-        </div>
-      </div>
+                              <Link
+                                to={item.id}
+                                onClick={(e) => {
+                                  this.props.CHANGE_PATHNAME(item.id);
+                                }}
+                                className="item__name"
+                              >
+                                {item.brand} {item.name}
+                              </Link>
+                              <p className="item__cost">
+                                {categoryPagePriceSwitch(
+                                  this.props.reduxState.main.currency,
+                                  item
+                                )}
+                              </p>
+                            </div>
+                          );
+                        })
+                      : null}
+                  </div>
+                </div>
+              </div>
+            );
+          }}
+        </Query>
+      </>
     );
   }
 }

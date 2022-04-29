@@ -18,16 +18,14 @@ export const GET_CURRENCIES = gql`
 `;
 
 export const GET_PRODUCTS = gql`
-  query {
-    category(input: { title: "all" }) {
+  query category($title: String!) {
+    category(input: { title: $title }) {
       products {
         id
         name
         brand
         gallery
-        category
         inStock
-        description
         attributes {
           id
           name
@@ -44,6 +42,35 @@ export const GET_PRODUCTS = gql`
           }
           amount
         }
+      }
+    }
+  }
+`;
+
+export const GET_PRODUCT = gql`
+  query product($id: String!) {
+    product(id: $id) {
+      id
+      name
+      brand
+      gallery
+      inStock
+      description
+      attributes {
+        id
+        name
+        type
+        items {
+          displayValue
+          value
+          id
+        }
+      }
+      prices {
+        currency {
+          symbol
+        }
+        amount
       }
     }
   }
