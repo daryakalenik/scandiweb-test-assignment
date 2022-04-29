@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import {
   CHANGE_PATHNAME,
   CONVERT_TOTAL,
-  ADD_ITEM_TO_CART,
-  DELETE_ITEM_FROM_CART,
   CHANGE_CART_STATUS,
 } from "../../ducks/main/reducer";
 import { AttributesBlock } from "../AttributesBlock/AttributesBlock";
@@ -125,12 +123,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     CONVERT_TOTAL: (value) => {
       dispatch(CONVERT_TOTAL(value));
-    },
-    ADD_ITEM_TO_CART: (value) => {
-      dispatch(ADD_ITEM_TO_CART(value));
-    },
-    DELETE_ITEM_FROM_CART: (value) => {
-      dispatch(DELETE_ITEM_FROM_CART(value));
     },
     CHANGE_CART_STATUS: () => {
       dispatch(CHANGE_CART_STATUS(""));
