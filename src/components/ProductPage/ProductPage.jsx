@@ -47,21 +47,18 @@ class ProductPage extends React.Component {
                             });
                           }}
                           className="images-block__item"
-                          style={{
-                            backgroundImage: `url(${photo})`,
-                          }}
-                        />
+                        >
+                          <img src={photo} alt={data.product.name} />
+                        </div>
                       );
                     })}
                   </div>
-                  <div
-                    className="product__main-image"
-                    style={{
-                      backgroundImage: `url(${
-                        data.product?.gallery[this.state.currentPhotoIndex]
-                      })`,
-                    }}
-                  />
+                  <div className="product__main-image">
+                    <img
+                      src={data.product?.gallery[this.state.currentPhotoIndex]}
+                      alt={data.product?.name}
+                    />
+                  </div>
                   <div className="text-block product__text-block">
                     <p className="text-block__brand">
                       <span>{data.product?.brand}</span>

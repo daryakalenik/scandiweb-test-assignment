@@ -67,10 +67,8 @@ class ProductsPage extends React.Component {
                                   this.props.CHANGE_PATHNAME(item.id);
                                 }}
                                 className="item-img"
-                                style={{
-                                  backgroundImage: `url(${item.gallery[0]})`,
-                                }}
                               >
+                                <img src={item.gallery[0]} alt={item.name} />
                                 {item.inStock ? " " : <p>OUT OF STOCK</p>}
                               </Link>
                               <span

@@ -71,12 +71,12 @@ class MiniCart extends React.Component {
                         <AttributesBlock item={item} />
                       </div>
                       <CartProductButtons item={item} />
-                      <div
-                        className="product-photo cart-product__product-photo"
-                        style={{
-                          backgroundImage: `url(${item.product.gallery[0]})`,
-                        }}
-                      ></div>
+                      <div className="product-photo cart-product__product-photo">
+                        <img
+                          src={item.product.gallery[0]}
+                          alt={item.product.name}
+                        />
+                      </div>
                     </div>
                   );
                 })
